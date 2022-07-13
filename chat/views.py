@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Room, Message
+from chat.models import Room, Message
 from django.http import HttpResponse, JsonResponse
 
 
@@ -34,12 +34,12 @@ def send(request):
     message = request.POST['message']
     username = request.POST['username']
     room_id = request.POST['room_id']
-    if message == -1:
-        return HttpResponse('Empty')
-    else:
+    if message.is_valid():
         new_message = Message.objects.create(value=message, user=username, room=room_id)
         new_message.save()
         return HttpResponse('Message sent successfully')
+    else:
+        return HttpResponse('Empty')
 
 
 def getMessages(request, room):
