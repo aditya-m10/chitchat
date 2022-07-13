@@ -34,12 +34,12 @@ def send(request):
     message = request.POST['message']
     username = request.POST['username']
     room_id = request.POST['room_id']
-    if message.is_valid():
+    if not message.is_valid():
+        return HttpResponse('Empty')
+    else:
         new_message = Message.objects.create(value=message, user=username, room=room_id)
         new_message.save()
         return HttpResponse('Message sent successfully')
-    else:
-        return HttpResponse('Empty')
 
 
 def getMessages(request, room):
